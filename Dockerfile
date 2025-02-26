@@ -1,20 +1,27 @@
-FROM odoo:17.0
+FROM odoo:17.0  
 
-ARG LOCALE=en_US.UTF-8
+ARG LOCALE=en_US.UTF-8  
 
-ENV LANGUAGE=${LOCALE}
-ENV LC_ALL=${LOCALE}
-ENV LANG=${LOCALE}
+ENV LANGUAGE=${LOCALE}  
+ENV LC_ALL=${LOCALE}  
+ENV LANG=${LOCALE}  
 
-USER 0
+USER 0  
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends locales netcat-openbsd \
-    && locale-gen ${LOCALE}
+    && locale-gen ${LOCALE}  
 
-WORKDIR /app
+WORKDIR /var/lib/odoo  
 
-COPY --chmod=755 entrypoint.sh ./
+COPY --chmod=755 entrypoint.sh ./  
 
-ENTRYPOINT ["/bin/sh"]
+# Expose Odoo default ports (8069 for web, 8072 for longpolling)
+EXPOSE 8069 8072  
 
-CMD ["entrypoint.sh"]
+# Set PostgreSQL details (will be set via Railway environment variables)
+ENV ODOO_DB_HOST=${DATABASE_URL}  
+ENV ODOO_DB_USER=odoo  
+ENV ODOO_DB_PASSWORD=odoo  
+
+# Start Odoo
+ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]
