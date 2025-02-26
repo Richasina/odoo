@@ -19,9 +19,9 @@ COPY --chmod=755 entrypoint.sh ./
 EXPOSE 8069 8072  
 
 # Set PostgreSQL details (will be set via Railway environment variables)
-ENV ODOO_DB_HOST=${DATABASE_URL}  
-ENV ODOO_DB_USER=odoo  
-ENV ODOO_DB_PASSWORD=odoo  
+ENV ODOO_DATABASE_HOST=${DATABASE_URL}  
+ENV ODOO_DATABASE_USER=odoo  
+ENV ODOO_DATABASE_PASSWORD=odoo  
 
 # Start Odoo
 ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]
